@@ -9,28 +9,9 @@ import {
 
 const app = express();
 const PORT = Number(process.env.PORT || 8787);
-const configuredOrigins = (process.env.CORS_ORIGIN || "")
-  .split(",")
-  .map((origin) => origin.trim())
-  .filter(Boolean);
-const localDevOrigins = ["http://localhost:5173", "http://127.0.0.1:5173"];
-const allowedOrigins = configuredOrigins.length > 0
-  ? configuredOrigins
-  : localDevOrigins;
-const corsOptions = configuredOrigins.length > 0 ? {
-  origin(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-      return;
-    }
 
-    const error = new Error("Origin is not allowed by CORS policy.");
-    error.statusCode = 403;
-    callback(error);
-  },
-} : {};
-
-app.use(cors(corsOptions));
+// Allow all origins - TEMPORARY for debugging CORS issues
+app.use(cors());
 
 app.use(express.json());
 
