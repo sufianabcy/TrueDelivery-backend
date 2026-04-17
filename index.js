@@ -17,8 +17,7 @@ const localDevOrigins = ["http://localhost:5173", "http://127.0.0.1:5173"];
 const allowedOrigins = configuredOrigins.length > 0
   ? configuredOrigins
   : localDevOrigins;
-
-app.use(cors(configuredOrigins.length > 0 ? {
+const corsOptions = configuredOrigins.length > 0 ? {
   origin(origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
@@ -29,7 +28,10 @@ app.use(cors(configuredOrigins.length > 0 ? {
     error.statusCode = 403;
     callback(error);
   },
-} : {}));
+} : {};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 app.use(express.json());
 
